@@ -22,7 +22,8 @@ $config = [
                 \yii\web\Response::FORMAT_JSON => [
                   'class' => 'yii\web\JsonResponseFormatter'
                 ],
-            ]
+            ],
+            'class'=> '\app\components\APIResponse'
         ],
         'user' => [
             'identityClass' => 'app\models\Users',
@@ -59,6 +60,8 @@ $config = [
                     'controller' => [
                         'article',
                         'user',
+                        'category',
+                        'status',
                     ],
                 ]
             ],

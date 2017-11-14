@@ -1,23 +1,28 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: ehnyn
+ * Date: 11/9/17
+ * Time: 10:09 PM
+ */
 
 namespace app\modules\blog\models;
 
-
 use yii\db\ActiveRecord;
 
-class Category extends  ActiveRecord
+class Status extends ActiveRecord
 {
 
-    /**
+    /**Returns associated table
      * @return string
      */
     public static function tableName()
     {
-        return 'category';
+        return 'status';
     }
 
     /**
-     * Returns the rules associated with category table
+     * Returns the rules associated with status table
      * @return array
      */
     public function rules()
@@ -25,7 +30,8 @@ class Category extends  ActiveRecord
         return [
             ['name', 'safe'],
             [['name'], 'required'],
-           // [['created_at', 'updated_at'], 'NOT NULL','TIMESTAMP'],
+            [['created_at'], 'default','value'=> date('Y-m-d H:i:s')],
+            [['updated_at'], 'default', 'value' => '0000-00-00 00:00:00']
         ];
     }
 
@@ -36,15 +42,9 @@ class Category extends  ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Category'
+            'name' => 'Status',
+            'created_at' => 'Date Created',
+            'updated_at' => 'Date Updated'
         ];
-    }
-
-    /**Shows relationship between this model and the article model
-     * @return \yii\db\ActiveQuery
-     */
-    public function getArticle()
-    {
-        return $this->hasMany(Article::className(), ['id' => 'status_id']);
     }
 }
