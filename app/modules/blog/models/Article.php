@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\blog\models;
 
+use app\models\User;
 use yii\db\ActiveRecord;
 
 class Article extends ActiveRecord {
@@ -21,9 +22,9 @@ class Article extends ActiveRecord {
     public function rules()
     {
         return [
-            [['category_id', 'status_id', 'title', 'description', 'created_at', 'updated_at'],'safe'],
+            [['category_id', 'status_id', 'title', 'description', 'created_at', 'updated_at', 'author_id'],'safe'],
             [['category_id', 'status_id'],'integer'],
-            [['title', 'description'], 'required'],
+            [['title', 'description', 'author_id'], 'required'],
             [['created_at'], 'default','value'=> date('Y-m-d H:i:s')],
             [['updated_at'], 'default', 'value' => '0000-00-00 00:00:00'],
         ];
@@ -45,5 +46,10 @@ class Article extends ActiveRecord {
     public function getStatus()
     {
         return $this->hasOne(Status::className(), ['status_id' => 'id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['author_id' => 'id']);
     }
 }

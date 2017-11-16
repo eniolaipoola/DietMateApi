@@ -12,22 +12,23 @@ class ArticleController extends Controller
     public function actionIndex() {
         $data = Article::find()
             ->all();
-        Yii::$app->response->ok('All Users', $data);
+        Yii::$app->response->ok('Composed Articles', $data);
     }
 
-    public function actionCreate() {
+    public function actionCreate($id) {
         $article = new Article();
-        try {
+        /*try {*/
             $article->attributes = Yii::$app->request->bodyParams;
             if (isset($article['title']) && !empty($article['description'])) {
+                $article->author_id = $id;
                 $article->save();
                 Yii::$app->response->ok('Article is successfully created', $article);
             } else {
                 Yii::$app->response->badRequest('Something is not right', $article->getErrors());
             }
-        } catch (Exception $e) {
+      /*  } catch (Exception $e) {
             Yii::$app->response->notFound('An error occurred, please try again');
-        }
+        }*/
     }
 
     public function actionView($id){
