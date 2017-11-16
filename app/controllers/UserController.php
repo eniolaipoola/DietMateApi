@@ -40,15 +40,35 @@ class UserController extends Controller
         }
     }
 
-    public function actionCreateUser() {
-        $user = new User();
+    public function actionCreateDietitian() {
+        $user = new User(['scenario' => User::SCENARIO_DIETITIAN]);
         try {
             $user->attributes = Yii::$app->request->bodyParams;
             if (isset($user['email']) && !empty($user['password'])) {
+                $user->generateHash($user['password']);
+                $user->role_id = 2;
                 $user->save();
                 Yii::$app->response->ok('User is successfully registered', $user);
             } else {
                 Yii::$app->response->badRequest('Something is not right', $user->getErrors());
+            }
+        } catch (Exception $e) {
+            Yii::$app->response->notFound('An error occurred, please try again');
+        }
+    }
+
+    public function actionCreateUser(){
+        $user = new User(['scenario' => User::SCENARIO_USER]);
+        try {
+            $user->attributes = Yii::$app->request->bodyParams;
+            if (isset($user['firstname']) && !empty($user['height']) && isset($user['weight'])) {
+                $bmi = $user->calcBmi($user['height'], $user['weight']);
+                $user->bmi = $bmi;
+                $user->role_id = 1;
+                $user->save();
+                Yii::$app->response->ok('User is successfully registered', $user);
+            } else {
+                Yii::$app->response->badRequest('Please fill in the required fields', $user->getErrors());
             }
         } catch (Exception $e) {
             Yii::$app->response->notFound('An error occurred, please try again');

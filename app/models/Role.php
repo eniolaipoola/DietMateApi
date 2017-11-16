@@ -21,13 +21,14 @@ class Role extends ActiveRecord
     {
         return [
             [['name', 'created_at','updated_at'], 'safe'],
+            ['name', 'required'],
+            [['created_at'], 'default','value'=> date('Y-m-d H:i:s')],
+            [['updated_at'], 'default', 'value' => '0000-00-00 00:00:00'],
         ];
     }
 
     public function getUser() {
-       return $this->hasMany(Users::className(), ['role_id' => 'id']);
+       return $this->hasMany(User::className(), ['id' => 'role_id']);
     }
-
-
 
 }
