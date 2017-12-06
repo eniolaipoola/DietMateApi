@@ -62,6 +62,7 @@ $config = [
                         'user',
                         'category',
                         'status',
+                        'bmi',
                     ],
                 ]
             ],

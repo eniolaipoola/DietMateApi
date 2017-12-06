@@ -17,7 +17,7 @@ class ArticleController extends Controller
 
     public function actionCreate($id) {
         $article = new Article();
-        /*try {*/
+        try {
             $article->attributes = Yii::$app->request->bodyParams;
             if (isset($article['title']) && !empty($article['description'])) {
                 $article->author_id = $id;
@@ -26,9 +26,9 @@ class ArticleController extends Controller
             } else {
                 Yii::$app->response->badRequest('Something is not right', $article->getErrors());
             }
-      /*  } catch (Exception $e) {
+        } catch (Exception $e) {
             Yii::$app->response->notFound('An error occurred, please try again');
-        }*/
+        }
     }
 
     public function actionView($id){

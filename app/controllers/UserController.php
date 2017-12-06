@@ -40,6 +40,20 @@ class UserController extends Controller
         }
     }
 
+    public function actionSignUp(){
+        $data = new User();
+        $data->attributes = Yii::$app->request->bodyParams;
+        if(empty($data['email']) || empty($data['password'])) {
+            Yii::$app->response->badRequest('Please input your email or password', $data->getErrors());
+        }
+        $check = User::findOne($data['email']);
+        if ($check){
+            Yii::$app->response->badRequest('Invalid email or password');
+        }
+        $data->generateHash($data['password']);
+        $data->save();
+    }
+
     public function actionCreateDietitian() {
         $user = new User(['scenario' => User::SCENARIO_DIETITIAN]);
         try {
@@ -61,9 +75,11 @@ class UserController extends Controller
         $user = new User(['scenario' => User::SCENARIO_USER]);
         try {
             $user->attributes = Yii::$app->request->bodyParams;
-            if (isset($user['firstname']) && !empty($user['height']) && isset($user['weight'])) {
-                $bmi = $user->calcBmi($user['height'], $user['weight']);
-                $user->bmi = $bmi;
+            if (isset($user['email']) && !empty($user['password'])) {
+                $check = $user->find()->from('users')->where('email' == $user['email']);
+                if($check) {
+                    Yii::$app->response->badRequest("Email already exists", $user->getErrors());
+                }
                 $user->role_id = 1;
                 $user->save();
                 Yii::$app->response->ok('User is successfully registered', $user);
