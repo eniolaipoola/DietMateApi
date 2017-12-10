@@ -63,6 +63,7 @@ $config = [
                         'category',
                         'status',
                         'bmi',
+                        'ideal-weight',
                     ],
                 ]
             ],
