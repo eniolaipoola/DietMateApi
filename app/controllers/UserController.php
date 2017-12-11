@@ -7,7 +7,6 @@ use app\models\User;
 use yii\base\Exception;
 use yii\rest\Controller;
 
-
 class UserController extends Controller
 {
     public function actionIndex() {
@@ -19,7 +18,7 @@ class UserController extends Controller
     public function actionLogin() {
         $data = Yii::$app->request->bodyParams;
         try{
-            if(isset($data['email']) && !empty($data['password'])){
+            if(isset($data['email']) && isset($data['password'])){
                 $user = User::findOne(['email' => $data['email']]);
                 $check = $user->validatePassword($data['password']);
                 if($check) {
@@ -52,6 +51,7 @@ class UserController extends Controller
         }
         $data->generateHash($data['password']);
         $data->save();
+        Yii::$app->response->ok("Sucessful", $data);
     }
 
     public function actionCreateDietitian() {
@@ -72,7 +72,7 @@ class UserController extends Controller
     }
 
     public function actionCreateUser(){
-        $user = new User(['scenario' => User::SCENARIO_USER]);
+        $user = new User();
         try {
             $user->attributes = Yii::$app->request->bodyParams;
             if (isset($user['email']) && !empty($user['password'])) {
@@ -81,6 +81,7 @@ class UserController extends Controller
                     Yii::$app->response->badRequest("Email already exists", $user->getErrors());
                 }
                 $user->role_id = 1;
+                $user->generateHash($user['password']);
                 $user->save();
                 Yii::$app->response->ok('User is successfully registered', $user);
             } else {

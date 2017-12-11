@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ehnyn
- * Date: 11/28/17
- * Time: 5:44 PM
- */
 
 namespace app\models;
 
@@ -23,18 +17,20 @@ class IdealWeight extends ActiveRecord {
         ];
     }
 
-    public function calcIBW($height, $sex){
+    public function calcIBW($sex, $height){
         //Calculates ideal body weight for female using Hanwi's formula
         if ($sex == 0) {
             $ibw = 45.5 + $this->calcHanwiIncrementFemale($height) ;
+            $result = round($ibw, 2);
         } elseif ($sex == 1) {
             //calculates ibw for male using Hanwi's formula
             $ibw = 48 + $this->calcHanwiIncrementMale($height);
+            $result = round($ibw, 2);
         } else {
             return "An error occured while calculating ideal weight";
         }
 
-        return $ibw;
+        return $result;
     }
 
     //Converts height from cm to feet for easy use to calculate ideal weight
